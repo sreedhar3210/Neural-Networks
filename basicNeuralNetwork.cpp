@@ -14,7 +14,10 @@ const double TWO = 2;
 const double learningRate = 0.001;
 const double MAX_HOUSE_PRICE = 20000000;
 const double MAX_AREA = 20000;
-
+const double MAX_BEDROOMS = 6;
+const double MAX_BATHROOMS = 4;
+const double MAX_STORIES = 4;
+const double MAX_PARKING = 3;
 /*********** Convention ************
 *
 * Always use Layers, Neurons as the order of dimensions
@@ -185,6 +188,10 @@ vector<vector<double>> processData(vector<vector<double>> data) {
         int l = data[i].size();
         data[i][0] /= MAX_HOUSE_PRICE;
         data[i][1] /= MAX_AREA;
+        data[i][2] /= MAX_BEDROOMS;
+        data[i][3] /= MAX_BATHROOMS;
+        data[i][4] /= MAX_STORIES;
+        data[i][10] /= MAX_PARKING;
         swap(data[i][0], data[i][l - 1]);
     }
 
@@ -217,7 +224,7 @@ void neuralNetwork(vector<vector<double>> data) {
     vector<vector<double>> activationValues = initializeValues(numberOfLayers, numberOfNeurons);
 
     int i, i1, i2, j, k1, k2;
-    int noOfBatches = 100000;
+    int noOfBatches = 1000;
 
     // cout<<"Displaying weights"<<endl;
     // displayData(weights);
@@ -261,9 +268,7 @@ void neuralNetwork(vector<vector<double>> data) {
             }
 
             double errorValue = (activationValues[n][0] - data[i1][11]) * (activationValues[n][0] - data[i1][11]);
-            cout<<"for row: "<<i1<<endl;
-            cout<<"Calculated output is: "<<fixed<<setprecision(6)<<activationValues[n][0]<<" Expected output is: "<<data[i1][11]<<endl;
-            cout<<"Error is: "<<errorValue<<endl;
+            cout<<"Calculated output is: "<<fixed<<setprecision(6)<<activationValues[n][0]<<" Expected output is: "<<data[i1][11]<<" Error is: "<<errorValue<<endl;
 
             // Calculate Differentiattion constants
             vector<vector<double>> diffConstants = activationValues;
@@ -314,9 +319,9 @@ void neuralNetwork(vector<vector<double>> data) {
 }
 
 int main() {
-    string filename = "Housing.csv";
+    string filename = "Housing1.csv";
 
-    cout<<"Running time: 5"<<endl;
+    cout<<"Running time: 9"<<endl;
     cout << "Loading dataset from " << filename << "...\n";
     vector<vector<double>> data = readCSV(filename, true);
     vector<vector<double>> processedData = processData(data);
